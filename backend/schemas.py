@@ -1,9 +1,11 @@
-from pydantic import BaseModel, EmailStr
+# CRM/backend/schemas.py
+from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import Optional
+from datetime import datetime
 
-# ==========================
-# 🚀 User Schemas
-# ==========================
+# ==================================================
+# 🚀 USERS
+# ==================================================
 
 class UserCreate(BaseModel):
     name: str
@@ -11,60 +13,59 @@ class UserCreate(BaseModel):
     password: str
 
 class UserUpdate(BaseModel):
-    name: Optional[str]
-    email: Optional[EmailStr]
-    password: Optional[str]
+    id: Optional[int] = None
+    name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None
 
 class UserResponse(BaseModel):
     id: int
     name: str
     email: EmailStr
+    password: str
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
-# ==========================
-# 🧰 Client Schemas
-# ==========================
+# ==================================================
+# 🧰 CLIENTS
+# ==================================================
 
 class ClientCreate(BaseModel):
     name: str
     email: EmailStr
-    phone: Optional[str]
+    phone: Optional[str] = None
     user_id: int
 
 class ClientUpdate(BaseModel):
-    name: Optional[str]
-    email: Optional[EmailStr]
-    phone: Optional[str]
-    user_id: Optional[int]
-    
+    name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    phone: Optional[str] = None
+    user_id: Optional[int] = None
+
 class ClientResponse(BaseModel):
     id: int
     name: str
     email: EmailStr
-    phone: Optional[str]
+    phone: str
     user_id: int
 
-    model_config = {
-        "from_attributes": True
-    }
+    model_config = ConfigDict(from_attributes=True)
 
 
-# ==========================
-# 📋 Task Schemas
-# ==========================
+# ==================================================
+# 📋 TASKS
+# ==================================================
 
 class TaskCreate(BaseModel):
     description: str
-    status: Optional[str] = None
+    status: Optional[str] = "pending"  # ✅ prevents NULL error
     client_id: int
 
 class TaskUpdate(BaseModel):
-    description: Optional[str]
-    status: Optional[str]
-    client_id: Optional[int]
+    description: Optional[str] = None
+    status: Optional[str] = None
+    client_id: Optional[int] = None
 
 class TaskResponse(BaseModel):
     id: int
@@ -72,29 +73,29 @@ class TaskResponse(BaseModel):
     status: str
     client_id: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
- # ==========================
-# 💰 Payment Schemas
-# ==========================
+
+# ==================================================
+# 💰 PAYMENTS
+# ==================================================
 
 class PaymentCreate(BaseModel):
     amount: float
-    status: Optional[str] = None
+    status: Optional[str] = "pending"
     client_id: int
 
 class PaymentUpdate(BaseModel):
-    amount: Optional[float]
-    status: Optional[str]
-    client_id: Optional[int]
+    amount: Optional[float] = None
+    status: Optional[str] = None
+    client_id: Optional[int] = None
 
 class PaymentResponse(BaseModel):
     id: int
+    client_id: int
+    task_id: Optional[int] = None
     amount: float
     status: str
-    client_id: int
+    created_at: datetime
 
-    class Config:
-        orm_mode = True
-        
+    model_config = ConfigDict(from_attributes=True)
