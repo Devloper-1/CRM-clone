@@ -1,0 +1,11 @@
+{
+    "python.defaultInterpreterPath": "venv\\Scripts\\python.exe",
+    "python.analysis.extraPaths": [
+        "venv\\Lib\\site-packages",
+        "C:\\Users\\Darpan\\OneDrive\\Documents\\full-stack-project-CRM-clone\\CRM"
+    ],
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "tests"
+    ]
+}

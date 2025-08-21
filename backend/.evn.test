@@ -1,8 +1,0 @@
-# tell the app this is test mode
-ENV=test
-
-# test database
-DATABASE_URL=postgresql://postgres:POSTGRES@localhost/crm_test
-
-# optional: use a fake email backend
-EMAIL_BACKEND=console

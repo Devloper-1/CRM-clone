@@ -1,0 +1,19 @@
+/* index.css */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #74b9ff, #0984e3);
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 1.2rem;
+}

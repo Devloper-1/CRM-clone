@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMART CRM - Welcome</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800 relative overflow-hidden">
+
+  <!-- Watermark -->
+  <div class="absolute inset-0 flex justify-center items-center pointer-events-none select-none opacity-30">
+   <img src="img/graph.png" class="hidden md:block w-[40rem] h-auto" alt="Watermark">
+   <img src="img/graph.png" class="block md:hidden w-40 h-auto" alt="Watermark">
+  </div>
+
+  <!-- Header -->
+  <header class="bg-gray-300 shadow-md relative z-20">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+
+      <!-- Left: Logo -->
+      <h1 class="text-lg font-bold">SMART CRM</h1>
+
+      <!-- Center: Navigation (only on desktop) -->
+      <nav class="hidden md:flex space-x-6">
+        <a href="login.html" class="text-blue-600 hover:text-gray-700 hover:underline font-medium">Login</a>
+        <a href="register.html" class="text-blue-600 hover:text-gray-700 hover:underline font-medium">Register</a>
+        <a href="dashboard.html" class="text-blue-600 hover:text-gray-700 hover:underline font-medium">Dashboard</a>
+      </nav>
+
+      <!-- Right: 3-dot button (only on mobile) -->
+      <button id="menu-toggle" class="p-2 text-2xl md:hidden">⋮</button>
+    </div>
+  </header>
+
+  <!-- Sidebar (hidden by default on mobile) -->
+  <div id="sidebar"
+    class="fixed top-0 left-0 z-30 w-56 h-screen p-8 bg-gray-200 bg-opacity-20 text-white transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+    <h2 class="mb-5 text-2xl text-center  font-bold">SMART-CRM</h2>
+    <br>
+    <ul class="space-y-4">
+      <li class=" bg-[#1abc9c] rounded">
+        <a href="#" class="block px-6 py-2 rounded hover:bg-[#34495e] ">Index</a>
+      </li>
+      <li class="bg-[#a2b3af] rounded">
+        <a href="login.html" class="block px-6 py-2 rounded hover:bg-[#34495e]">Login</a>
+      </li>
+      <li class="bg-[#a2b3af] rounded">
+        <a href="register.html" class="block px-6 py-2 rounded hover:bg-[#34495e]">Register</a>
+      </li>
+      <li class="bg-[#a2b3af] rounded">
+        <a href="dashboard.html" class="block px-6 py-2 rounded hover:bg-[#34495e]">Dashboard</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex flex-col items-center justify-center text-center h-[calc(100vh-80px)] px-4 relative z-10">
+    <h2 id="welcomeText" class="text-4xl text-gray-800 font-semibold mb-4"></h2>
+
+    <div id="afterContent" class="opacity-0">
+      <p class="text-lg text-gray-800 mb-8 max-w-md">
+        Manage your clients, tasks, and payments efficiently with a simple and intuitive interface.
+      </p>
+      <div class="space-x-4">
+        <a href="login.html"
+          class="bg-gray-200 text-black px-6 py-2 rounded hover:bg-gray-300 border border-transparent hover:border-black">Login</a>
+        <a href="register.html"
+          class="bg-gray-200 text-black px-6 py-2 rounded hover:bg-gray-300 border border-transparent hover:border-black">Register</a>
+      </div>
+    </div>
+
+    
+    
+  </main>
+
+  <!-- Animation + Sidebar Script -->
+  <script>
+    // Text animation
+    const text = "Welcome To SMART CRM";
+    const container = document.getElementById("welcomeText");
+    const afterContent = document.getElementById("afterContent");
+
+    text.split("").forEach(char => {
+      const span = document.createElement("span");
+      span.textContent = char;
+      span.style.opacity = 0;
+      span.style.color = '#9CA3AF';
+      span.style.transition = "opacity 0.6s ease, color 0.8s ease";
+      container.appendChild(span);
+    });
+
+    window.onload = () => {
+      const spans = container.querySelectorAll("span");
+      spans.forEach((span, i) => {
+        setTimeout(() => {
+          span.style.opacity = 1;
+          span.style.color = "#1F2937";
+        }, i * 150);
+      });
+
+      const totalTime = spans.length * 150 + 500;
+      setTimeout(() => {
+        afterContent.style.transition = "opacity 1s ease";
+        afterContent.style.opacity = 1;
+      }, totalTime);
+    };
+
+    // Sidebar toggle
+    const menuBtn = document.getElementById("menu-toggle");
+    const sidebar = document.getElementById("sidebar");
+
+    menuBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("-translate-x-full");
+    });
+  </script>
+
+</body>
+
+</html>

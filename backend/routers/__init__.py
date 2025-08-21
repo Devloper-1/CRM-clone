@@ -1,3 +1,4 @@
+# CRM\backend\__init__.py
 from .users import router as users_router
 from .clients import router as clients_router
 from .tasks import router as tasks_router

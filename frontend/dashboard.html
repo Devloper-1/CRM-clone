@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMART-CRM | Dashboard</title>
+
+  <!-- Link CSS -->
+  <!-- <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css"> -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+
+</head>
+
+<body class=" m-0 bg-gray-100 text-gray-800">
+
+  <!-- Overlay (hidden by default) -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-10 hidden md:hidden"></div>
+
+
+
+  <!-- Top bar for mobile -->
+  <div class="flex w-full bg-white-100 text-white p-3 items-center gap-4 fixed md:hidden z-10 ">
+    <button id="menu-toggle" class="p-2 bg-gray-500 text-white md:hidden">☰</button>
+    <h1 class="text-lg font-semibold text-black">Dashboard</h1>
+    <input class="w-20  border-black" type="text" placeholder=" Screch">
+    <button id="notifBtn" class="relative p-2 rounded-full hover:bg-gray-100">
+      <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">0</span>
+      🔔
+
+    </button>
+  </div>
+
+  <!-- Sidebar -->
+  <div id="sidebar"
+    class="w-56 bg-[#2c3e50] text-white p-8 h-screen fixed top-0 left-0 transition-transform duration-300 ease-in-out  md:block -translate-x-full md:translate-x-0 z-20  bg-opacity-20">
+    <h2 class="mb-5 text-3xl text-center  font-bold">SMART-CRM</h2>
+    <br>
+    <ul class="space-y-4 ">
+      <li class=" bg-[#1abc9c] rounded"><a href="#" class="block px-6 py-2 rounded">Dashboard</a></li>
+      <li><a href="clients.html" class="block px-6 text-2xl py-3 rounded hover:bg-[#34495e]">Clients</a></li>
+      <li><a href="#" class="block px-6 text-2xl py-3 rounded hover:bg-[#34495e]">Tasks</a></li>
+      <li><a href="#" class="block px-6 text-2xl py-3 rounded hover:bg-[#34495e]">Payments</a></li>
+    </ul>
+  </div>
+
+
+
+  <!-- Main Content -->
+  <div class="md:ml-52  p-5 pt-16 md:pt-5  ">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10  max-w-4xl mx-auto mb-10 ">
+
+      <div class="bg-white rounded-lg shadow p-10 text-center">
+        <h2 class="text-lg font-semibold text-gray-600 mb-2">Total Clients</h2>
+        <p class="text-5xl font-bold text-[#1abc9c] ">👥</p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow p-10 text-center">
+        <h2 class="text-lg font-semibold text-gray-600 mb-2 ">Pending Tasks</h2>
+        <p class="text-5xl font-bold text-yellow-500">📝</p>
+      </div>
+      <div class="bg-white rounded-lg shadow p-10 text-center">
+        <h2 class="text-lg font-semibold text-gray-600 mb-2 ">Payments Due</h2>
+        <p class="text-5xl font-bold text-red-500">💰</p>
+      </div>
+    </div>
+
+    <div class="px-52 py-30 w-40">
+      <img src="img/graph.png" alt="">
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById("menu-toggle");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+
+    menuToggle?.addEventListener("click", () => {
+      sidebar.classList.toggle("-translate-x-full"); // just toggle open/close
+      overlay.classList.toggle("hidden");            // toggle overlay
+    });
+
+    overlay?.addEventListener("click", () => {
+      sidebar.classList.add("-translate-x-full"); // force close sidebar
+      overlay.classList.add("hidden");            // hide overlay
+    });
+  </script>
+
+
+</body>
+
+</html>
