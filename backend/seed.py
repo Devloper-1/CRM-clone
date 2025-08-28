@@ -51,5 +51,8 @@ else:
     print("ℹ️ Database already has data. Skipping seeding.")
 
 db.close()
+
 print("🔍 Engine URL:", engine.url)
 print("🔍 Tables in metadata:", Base.metadata.tables.keys())
+
+
