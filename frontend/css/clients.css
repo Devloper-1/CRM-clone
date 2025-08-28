@@ -1,0 +1,68 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+.table-container {
+  display: flex;
+  justify-content: center; /* horizontally center */
+  margin-top: 20px;
+}
+
+table {
+  
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+input, button {
+  margin: 5px;
+  padding: 8px;
+}
+
+.form-container {
+  margin-top: 20px;
+}
+
+button {
+  cursor: pointer;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #2980b9;
+}
+
+/* for mobile */
+
+/* Make table scrollable on small screens */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  display: block;
+  overflow-x: auto;   /* ✅ horizontal scroll if needed */
+  white-space: nowrap;
+}
+
+/* Inputs full width on small screens */
+@media (max-width: 600px) {
+  input, button {
+    width: 80%;
+    margin: 8px 0;
+  }
+}

@@ -1,0 +1,10 @@
+#clientsTable tr {
+  cursor: pointer;
+}
+#clientsTable tr:hover {
+  background-color: #f3f4f6; /* Tailwind's gray-100 */
+}
+#clientsTable td {
+      border: 1px solid #d1d5db; /* Tailwind border-gray-300 */
+      padding: 0.5rem 1rem;      /* Tailwind px-4 py-2 */
+    }

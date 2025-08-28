@@ -1,0 +1,27 @@
+<!-- Form -->
+<div class="mt-6 bg-white p-6 rounded-lg shadow">
+  <h2 class="text-lg font-semibold mb-4">Add / Update Client</h2>
+  <form id="clientForm">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <input type="number" id="clientId" placeholder="ID (for update/delete)" class="border p-2 rounded" />
+      <input type="text" id="userId" placeholder="User ID" required class="border p-2 rounded" />
+      <input type="text" id="name" placeholder="Name" required class="border p-2 rounded" />
+      <input type="email" id="email" placeholder="Email" required class="border p-2 rounded" />
+      <input type="text" id="phone" placeholder="Phone" class="border p-2 rounded" />
+    </div>
+    <div class="mt-4 flex gap-2">
+      <button type="button" onclick="addClient()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add</button>
+      <button type="button" onclick="updateClient()" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Update</button>
+      <button type="button" onclick="deleteClient()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Delete</button>
+      <!-- ✅ Clear button added here -->
+      <button type="button" id="clearFormBtn" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Clear</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Clear form logic
+  document.getElementById("clearFormBtn").addEventListener("click", () => {
+    document.getElementById("clientForm").reset();
+  });
+</script>
