@@ -2,108 +2,100 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clients</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- link section -->
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>CRM Login</title>
 
-  <!-- Backend fetch helper MUST load first -->
-  <script src=" js/clients.js" defer></script>
-
-  <!-- UI logic loads after -->
-  <script src=" js/clients_ui.js" defer></script>
-
-  <!-- Your CSS -->
-  <link rel="stylesheet" href="css/perctic.css">
-
-
+  <!-- ✅ Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-  <!-- Header -->
-  <header class="flex items-center justify-between bg-gray-300 text-white p-4 shadow-md">
-    <h1 class="text-xl font-semibold">Clients</h1>
+  <!-- ✅ White card -->
+  <div class="w-full max-w-sm bg-white p-8 rounded-xl shadow-lg border border-gray-400">
 
-    <!-- Search + Menu -->
-    <div class="flex items-center gap-4">
-      <input type="text" id="searchInput" placeholder="Search clients..."
-        class="w-52 md:w-124 px-3 py-1 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-white" />
+    <!-- ✅ Heading -->
+    <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Login</h2>
 
-      <!-- 3 Dots -->
-      <button id="menuToggle" class="p-2 hover:bg-blue-700 rounded-lg">
-        ⋮
+    <!-- ✅ Login Form -->
+    <form id="loginForm">
+
+      <!-- Email -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm mb-2" for="email">Email</label>
+        <input id="email" type="email" placeholder="Enter your email"
+          class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      </div>
+
+      <!-- Password with eye toggle -->
+      <div class="mb-4 relative">
+        <label class="block text-gray-700 text-sm mb-2" for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter your password"
+          class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 pr-10" />
+        <!-- 👁️ Eye Icon -->
+        <button type="button" onclick="togglePassword()"
+          class="absolute right-2 top-9 text-gray-600 hover:text-gray-900">
+          👁️
+        </button>
+      </div>
+
+      <!-- Error Message -->
+      <p id="errorMsg" class="text-red-500 text-sm mb-2 hidden"></p>
+
+      <!-- Login Button -->
+      <button type="submit"
+        class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">
+        Login
       </button>
-    </div>
-  </header>
 
-  <!-- Sidebar -->
-  <aside id="sidebar"
-    class="fixed top-0 left-0 w-64 h-full bg-white shadow-lg transform -translate-x-full transition-transform duration-300 z-20">
-    <div class="p-4 font-semibold border-b">Menu</div>
-    <ul class="p-4 space-y-2">
-      <li><a href="#" class="block p-2 hover:bg-gray-200 rounded">Dashboard</a></li>
-      <li><a href="#" class="block p-2 hover:bg-gray-200 rounded">Clients</a></li>
-      <li><a href="#" class="block p-2 hover:bg-gray-200 rounded">Payments</a></li>
-    </ul>
-  </aside>
-
-  <!-- Overlay -->
-  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-10"></div>
-
-  <!-- Page Content -->
-  <main class="p-6">
-
-    <!-- data table  -->
-    <!-- ✅ Updated Table -->
-    <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-      <table class="min-w-full border border-gray-300">
-        <thead class="bg-gray-200">
-          <tr>
-            <th class="border border-gray-300 px-4 py-2 text-left">ID</th>
-            <th class="border border-gray-300 px-4 py-2 text-left">User ID</th>
-            <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
-            <th class="border border-gray-300 px-4 py-2 text-left">Email</th>
-            <th class="border border-gray-300 px-4 py-2 text-left">Phone</th>
-          </tr>
-        </thead>
-        <tbody id="clientsTable" class="divide-y divide-gray-300">
-          <tr>
-            <td colspan="5" class="px-4 py-3 text-center text-gray-500">Loading...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Form -->
-    <form id="clientForm" class="mt-6 bg-white p-6 rounded-lg shadow">
-      <h2 class="text-lg font-semibold mb-4">Add / Update Client</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input type="number" id="clientId" placeholder="ID (for update/delete)" class="border p-2 rounded" />
-        <input type="text" id="userId" placeholder="User ID" required class="border p-2 rounded" />
-        <input type="text" id="name" placeholder="Name" required class="border p-2 rounded" />
-        <input type="email" id="email" placeholder="Email" required class="border p-2 rounded" />
-        <input type="text" id="phone" placeholder="Phone" class="border p-2 rounded" />
-      </div>
-      <div class="mt-4 flex flex-wrap gap-2">
-        <button type="button" onclick="addClient()"
-          class="flex-1 md:flex-none bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add</button>
-        <button type="button" onclick="updateClient()"
-          class="flex-1 md:flex-none bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Update</button>
-        <button type="button" onclick="deleteClient()"
-          class="flex-1 md:flex-none bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Delete</button>
-        <button type="button" id="clearbtn"
-          class="flex-1 md:flex-none bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Clear</button>
-      </div>
-
+      <!-- Register Link -->
+      <p class="mt-4 text-center text-sm text-gray-600">
+        Don’t have an account?
+        <a href="register.html" class="text-blue-600 hover:underline">Register</a>
+      </p>
     </form>
+  </div>
 
-  </main>
+  <!-- ✅ JS -->
+  <script>
+    // 👁️ Toggle password visibility
+    function togglePassword() {
+      const pwd = document.getElementById("password");
+      pwd.type = pwd.type === "password" ? "text" : "password";
+    }
 
+    // Handle login form
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
 
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const errorMsg = document.getElementById("errorMsg");
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          sessionStorage.setItem("authToken", data.token);
+          window.location.href = "dashboard.html";
+        } else {
+          errorMsg.textContent = data.detail || "Invalid email or password!";
+          errorMsg.classList.remove("hidden");
+        }
+      } catch (err) {
+        errorMsg.textContent = "⚠️ Server error, try again later.";
+        errorMsg.classList.remove("hidden");
+      }
+    });
+  </script>
 </body>
-
 </html>
