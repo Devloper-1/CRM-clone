@@ -8,22 +8,27 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-const token = sessionStorage.getItem("token");
+// Login tocken 
+document.addEventListener("DOMContentLoaded", () => {
+  const token = sessionStorage.getItem("token");
+  if (!token) {
+    // if no token → send back to login
+    window.location.href = "login.html";
+  }
+});
 
-// If not logged in → redirect
-if (!token) {
-  window.location.href = "login.html";
-}
+// Logout 
+async function logout() {
+  const token = sessionStorage.getItem("token");
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
   try {
-    await fetch("http://127.0.0.1:8000/auth/logout?token=" + token, {
+    await fetch("http://127.0.0.1:8000/logout?token=" + token, {
       method: "POST"
     });
   } catch (err) {
     console.log("Error logging out:", err);
   }
 
-  sessionStorage.removeItem("token");  // remove token
-  window.location.href = "login.html"; // redirect
-});
+  sessionStorage.clear();
+  window.location.href = "login.html";
+}
