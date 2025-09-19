@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasks</title>
+  
+  <!-- GLOBAL URL js -->
+  <script src="js/config.js" defer></script>
+   <!-- Token js -->
+    <script src="api.js"></script>
+    
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tasks.js" defer></script>
+  <script src="js/tasks_ui.js" defer></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+  <!-- Header -->
+  <header class="flex items-center justify-between bg-gray-300 text-white p-4 shadow-md">
+    <h1 class="text-xl font-semibold">Tasks</h1>
+    <div class="flex items-center gap-4">
+      <input type="text" id="searchInput" placeholder="Search tasks..."
+        class="px-3 py-1 w-40 md:w-60 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-white" />
+      <button id="menuToggle" class="p-2 hover:bg-blue-700 rounded-lg">⋮</button>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside id="sidebar"
+    class="fixed top-0 left-0 w-64 h-full bg-white shadow-lg transform -translate-x-full transition-transform duration-300 z-20">
+    <div class="p-4 font-semibold border-b">Menu</div>
+    <ul class="p-4 space-y-2">
+      <li><a href="dashboard.html" class="block p-2 hover:bg-gray-200 rounded">Dashboard</a></li>
+      <li><a href="clients.html" class="block p-2 hover:bg-gray-200 rounded">Clients</a></li>
+      <li><a href="payments.html" class="block p-2 hover:bg-gray-200 rounded">Payments</a></li>
+    </ul>
+  </aside>
+
+  <!-- Overlay -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-10"></div>
+
+  <!-- Main -->
+  <main class="p-6">
+
+    <!-- Table -->
+    <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+      <table class="min-w-full border border-gray-300">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="border px-4 py-2">ID</th>
+            <th class="border px-4 py-2">Client ID</th>
+            <th class="border px-4 py-2">Description</th>
+            <th class="border px-4 py-2">Status</th>
+          </tr>
+        </thead>
+        <tbody id="tasksTable">
+          <tr><td colspan="4" class="text-center py-3">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Form -->
+    <form id="taskForm" class="mt-6 bg-white p-6 rounded-lg shadow">
+      <h2 class="text-lg font-semibold mb-4">Add / Update Task</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="number" id="taskId" placeholder="Task ID (for update/delete)" class="border p-2 rounded" />
+        <input type="number" id="clientId" placeholder="Client ID" required class="border p-2 rounded" />
+        <input type="text" id="description" placeholder="Description" required class="border p-2 rounded" />
+        <input type="text" id="status" placeholder="Status" required class="border p-2 rounded" />
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <button type="button" onclick="addTask()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add</button>
+        <button type="button" onclick="updateTask()" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Update</button>
+        <button type="button" onclick="deleteTask()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Delete</button>
+        <button type="button" id="clearbtn" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Clear</button>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+  const tasks = await apiFetch("http://127.0.0.1:8000/tasks");
+  console.log(tasks);
+    });
+  </script>
+
+</body>
+</html>

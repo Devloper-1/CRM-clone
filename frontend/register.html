@@ -1,43 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Register</title>
+  <!-- Tailwind CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <!-- JS (order matters) -->
+  <script src="js/config.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/register.js" defer></script>
+  <script src="js/register_ui.js" defer></script>
 </head>
+
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
   <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
     <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Register</h2>
 
+    <!-- ✅ no inline JS -->
     <form>
       <div class="mb-4">
         <label class="block text-gray-700 text-sm mb-2" for="name">Name</label>
-        <input id="name" type="text" placeholder="Your name"
-               class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <input id="name" type="text" placeholder="Your name" required
+          class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
       </div>
 
       <div class="mb-4">
         <label class="block text-gray-700 text-sm mb-2" for="email">Email</label>
-        <input id="email" type="email" placeholder="Your email"
-               class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <input id="email" type="email" placeholder="Your email" required
+          class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
       </div>
 
+      <!-- Password -->
       <div class="mb-4">
         <label class="block text-gray-700 text-sm mb-2" for="password">Password</label>
-        <input id="password" type="password" placeholder="Create password"
-               class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <div class="relative">
+          <input id="password" type="password" placeholder="Create password" required
+            class="w-full px-4 py-2 border rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <button type="button" id="togglePassword"
+            class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-600">
+            👁️
+          </button>
+        </div>
       </div>
 
+      <!-- Confirm Password -->
       <div class="mb-6">
         <label class="block text-gray-700 text-sm mb-2" for="confirm">Confirm Password</label>
-        <input id="confirm" type="password" placeholder="Confirm password"
-               class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <div class="relative">
+          <input id="confirm" type="password" placeholder="Confirm password" required
+            class="w-full px-4 py-2 border rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <button type="button" id="toggleConfirm"
+            class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-600">
+            👁️
+          </button>
+        </div>
       </div>
 
       <button type="submit"
-              class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">
+        class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">
         Sign Up
       </button>
 
@@ -47,6 +71,5 @@
       </p>
     </form>
   </div>
-
 </body>
 </html>

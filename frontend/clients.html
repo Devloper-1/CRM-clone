@@ -7,6 +7,15 @@
   <title>Clients</title>
 
   <!-- link section -->
+
+
+  <!-- GLOBAL URL js -->
+  <script src="js/config.js" defer></script>
+  
+  <!-- Token js -->
+  <script src="api.js"></script>
+
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -101,6 +110,19 @@
     </form>
 
   </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const clients = await apiFetch("http://127.0.0.1:8000/clients");
+      console.log(clients);
+
+      const tbody = document.getElementById("clientsTableBody");
+      clients.forEach(c => {
+        const row = `<tr><td>${c.id}</td><td>${c.name}</td><td>${c.email}</td></tr>`;
+        tbody.innerHTML += row;
+      });
+    });
+  </script>
 
 
 </body>

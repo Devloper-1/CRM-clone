@@ -6,8 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Users</title>
 
+    <!-- GLOBAL URL js -->
+    <script src="js/config.js" defer></script>
+    
+    <!-- Token js -->
+    <script src="api.js"></script>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
 
     <!-- Backend fetch helper -->
     <script src="js/users.js" defer></script>
@@ -101,6 +108,21 @@
         </form>
 
     </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const users = await apiFetch("http://127.0.0.1:8000/users");
+            console.log(users);
+
+            // Example: render in a table
+            const tbody = document.getElementById("usersTableBody");
+            users.forEach(u => {
+                const row = `<tr><td>${u.id}</td><td>${u.name}</td><td>${u.email}</td></tr>`;
+                tbody.innerHTML += row;
+            });
+        });
+    </script>
+
 </body>
 
 </html>

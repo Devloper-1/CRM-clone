@@ -8,6 +8,8 @@ from backend import models, database
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
+from backend.routers import auth
+
 
 
 # Create tables
@@ -21,7 +23,7 @@ app.include_router(users.router)
 app.include_router(clients.router)
 app.include_router(tasks.router)
 app.include_router(payments.router)
-
+app.include_router(auth.router)
 
 # ✅ Allow frontend (http://127.0.0.1:5500) to talk with backend (http://127.0.0.1:8000)
 # app.add_middleware(

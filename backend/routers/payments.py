@@ -5,14 +5,21 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, Body
 from sqlalchemy.orm import Session
 from typing import Optional
-
 from backend import models
 from backend.schemas import PaymentCreate, PaymentUpdate, PaymentResponse
 from backend.database import get_db
+from backend.utils.auth_utils import verify_token
 
 # ✅ Router setup
 router = APIRouter(prefix="/payments", tags=["Payments"])
 
+# ================================
+# Login Token
+# ================================
+@router.get("/payments")
+def get_payment(token: str= Depends(verify_token) , db: Session= Depends(get_db)):
+    payments= db.query(models.Payment).all()
+    return payments
 
 # ================================
 # 1️⃣ Get Payments

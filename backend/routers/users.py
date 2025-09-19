@@ -5,13 +5,21 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, Body
 from sqlalchemy.orm import Session
 from typing import Optional
-
 from backend import models
 from backend.schemas import UserCreate, UserUpdate, UserResponse
 from backend.database import get_db
+from backend.utils.auth_utils import verify_token
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
+# ===============================
+# Login Token
+# ===============================
+
+@router.get("/users")
+def get_users(token: str= Depends(verify_token) , db: Session = Depends(get_db)):
+    users = db.query(models.User).all()
+    return users
 
 # ================================
 # 1️⃣ Get Users

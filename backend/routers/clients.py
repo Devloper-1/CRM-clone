@@ -5,13 +5,20 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, Body
 from sqlalchemy.orm import Session
 from typing import Optional
-
 from backend import models
 from backend.schemas import ClientCreate, ClientUpdate, ClientResponse
 from backend.database import get_db
+from backend.utils.auth_utils import verify_token
 
 router = APIRouter(prefix="/clients", tags=["Clients"])
 
+# ================================
+# Login Token
+# ================================
+@router.get("/clients")
+def get_clients(token: str= Depends(verify_token) , db: Session= Depends(get_db) ):
+    clients= db.query(models.Client).all()
+    return clients
 
 # ================================
 # 1️⃣ Get Clients
