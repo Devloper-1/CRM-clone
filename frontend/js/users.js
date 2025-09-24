@@ -5,7 +5,7 @@ const API_BASE = "";  // Same host
 
 // Fetch Users
 function fetchUsers() {
-  fetch(`${API_BASE}/users/`)
+  apiFetch(`${API_BASE}/users/`)
     .then(res => res.json())
     .then(data => {
       const container = document.getElementById("usersTable");
@@ -41,7 +41,7 @@ function addUser() {
     password: document.getElementById("password").value,
   };
 
-  fetch(`${API_BASE}/users`, {
+  apiFetch(`${API_BASE}/users`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -65,7 +65,7 @@ function updateUser() {
     password: document.getElementById("password").value,
   };
 
-  fetch(`${API_BASE}/users/${id}`, {
+  apiFetch(`${API_BASE}/users/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -83,7 +83,7 @@ function deleteUser() {
   const id = document.getElementById("userId").value;
   if (!id) return alert("Enter User ID to delete");
 
-  fetch(`${API_BASE}/users/${id}`, { method: "DELETE" })
+  apiFetch(`${API_BASE}/users/${id}`, { method: "DELETE" })
     .then(() => {
       alert("User deleted successfully!");
       fetchUsers();
@@ -93,3 +93,4 @@ function deleteUser() {
 
 window.fetchUsers = fetchUsers;
 document.addEventListener("DOMContentLoaded", fetchUsers);
+

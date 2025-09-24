@@ -1,34 +1,21 @@
-// dashboard.js
 document.addEventListener("DOMContentLoaded", () => {
+  const token = sessionStorage.getItem("token");
+  if (!token) window.location.href = "/frontend/login.html";
+
   const sidebar = document.getElementById("sidebar");
   const toggleBtn = document.getElementById("menu-toggle");
+  const overlay = document.getElementById("overlay");
 
-  toggleBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("active");
+  toggleBtn?.addEventListener("click", () => {
+    sidebar.classList.toggle("-translate-x-full");
+    overlay.classList.toggle("hidden");
   });
+
+  overlay?.addEventListener("click", () => {
+    sidebar.classList.add("-translate-x-full");
+    overlay.classList.add("hidden");
+  });
+
+  const logoutBtn = document.getElementById("logoutBtn");
+  logoutBtn?.addEventListener("click", logout); // Use global logout
 });
-
-// Login tocken 
-document.addEventListener("DOMContentLoaded", () => {
-  const token = sessionStorage.getItem("token");
-  if (!token) {
-    // if no token → send back to login
-    window.location.href = "login.html";
-  }
-});
-
-// Logout 
-async function logout() {
-  const token = sessionStorage.getItem("token");
-
-  try {
-    await fetch("http://127.0.0.1:8000/logout?token=" + token, {
-      method: "POST"
-    });
-  } catch (err) {
-    console.log("Error logging out:", err);
-  }
-
-  sessionStorage.clear();
-  window.location.href = "login.html";
-}

@@ -1,5 +1,3 @@
-// register.js
-
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("form");
 
@@ -24,14 +22,14 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (res.ok) {
-        alert("✅ Registration successful! Please login.");
-        window.location.href = "login.html";
+        alert("Registration successful! Please login.");
+        window.location.href = "/frontend/login.html";
       } else {
         const error = await res.json();
-        alert("❌ Register failed: " + error.detail);
+        alert("Register failed: " + error.detail);
       }
     } catch (err) {
-      alert("❌ Error: " + err.message);
+      alert("Error: " + err.message);
     }
   });
 });

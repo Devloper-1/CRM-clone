@@ -2,20 +2,25 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tasks</title>
-  
-  <!-- GLOBAL URL js -->
-  <script src="js/config.js" defer></script>
-   <!-- Token js -->
-    <script src="api.js"></script>
-    
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="js/tasks.js" defer></script>
-  <script src="js/tasks_ui.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRM - Tasks</title>
 
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Global config -->
+  <script src="/frontend/js/config.js" defer></script>
+
+  <!-- API helper -->
+  <script src="/frontend/js/api.js" defer></script>
+
+  <!-- Page-specific scripts -->
+  <script src="/frontend/js/tasks.js" defer></script>
+  <script src="/frontend/js/tasks_ui.js" defer></script>
+  
 </head>
+
 
 <body class="bg-gray-100">
 
@@ -58,7 +63,9 @@
           </tr>
         </thead>
         <tbody id="tasksTable">
-          <tr><td colspan="4" class="text-center py-3">Loading...</td></tr>
+          <tr>
+            <td colspan="4" class="text-center py-3">Loading...</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -73,20 +80,25 @@
         <input type="text" id="status" placeholder="Status" required class="border p-2 rounded" />
       </div>
       <div class="mt-4 flex flex-wrap gap-2">
-        <button type="button" onclick="addTask()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add</button>
-        <button type="button" onclick="updateTask()" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Update</button>
-        <button type="button" onclick="deleteTask()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Delete</button>
-        <button type="button" id="clearbtn" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Clear</button>
+        <button type="button" onclick="addTask()"
+          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add</button>
+        <button type="button" onclick="updateTask()"
+          class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Update</button>
+        <button type="button" onclick="deleteTask()"
+          class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Delete</button>
+        <button type="button" id="clearbtn"
+          class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Clear</button>
       </div>
     </form>
   </main>
 
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
-  const tasks = await apiFetch("http://127.0.0.1:8000/tasks");
-  console.log(tasks);
+      const tasks = await apiFetch("http://127.0.0.1:8000/tasks");
+      console.log(tasks);
     });
   </script>
 
 </body>
+
 </html>
