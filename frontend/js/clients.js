@@ -108,5 +108,3 @@ window.fetchClients = fetchClients;
 window.addClient = addClient;
 window.updateClient = updateClient;
 window.deleteClient = deleteClient;
-
-document.addEventListener("DOMContentLoaded", fetchClients);
