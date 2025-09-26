@@ -1,96 +1,91 @@
-// ================================
-// CRM Users JS
-// ================================
-const API_BASE = "";  // Same host
+// users.js
+// ----------------------
+// API CRUD for Users
+// ----------------------
 
-// Fetch Users
-function fetchUsers() {
-  apiFetch(`${API_BASE}/users/`)
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById("usersTable");
-      container.innerHTML = "";
+// Fetch & display all users
+async function fetchUsers() {
+  try {
+    const users = await apiFetch("/users");
+    const table = document.getElementById("usersTable");
+    table.innerHTML = "";
 
-      if (data.length === 0) {
-        container.innerHTML = `<tr><td colspan="4" class="text-center">No users found</td></tr>`;
-        return;
-      }
+    if (!users || users.length === 0) {
+      table.innerHTML = `<tr><td colspan="4" class="px-4 py-3 text-center text-gray-500">No users found</td></tr>`;
+      return;
+    }
 
-      data.forEach(user => {
-        container.innerHTML += `
-          <tr>
-            <td>${user.id}</td>
-            <td>${user.name}</td>
-            <td>${user.email}</td>
-            <td>${user.password ?? "N/A"}</td>
-          </tr>`;
-      });
-    })
-    .catch(err => {
-      console.error("Error fetching users:", err);
-      document.getElementById("usersTable").innerHTML =
-        `<tr><td colspan="4" class="text-center text-red-600">Error loading users</td></tr>`;
+    users.forEach(u => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="border px-4 py-2">${u.id}</td>
+        <td class="border px-4 py-2">${u.name}</td>
+        <td class="border px-4 py-2">${u.email}</td>
+        <td class="border px-4 py-2">N/A</td>
+      `;
+      table.appendChild(row);
     });
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    alert("Error fetching users");
+  }
 }
 
-// Add User
-function addUser() {
-  const data = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    password: document.getElementById("password").value,
-  };
+// Add user
+async function addUser() {
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-  apiFetch(`${API_BASE}/users`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  })
-    .then(res => res.json())
-    .then(() => {
-      alert("User added successfully!");
-      fetchUsers();
-    })
-    .catch(err => console.error("Error adding user:", err));
+  try {
+    await apiFetch("/users/register", {
+      method: "POST",
+      body: JSON.stringify({ name, email, password }),
+    });
+    alert("User added successfully!");
+    fetchUsers();
+  } catch (err) {
+    console.error(err);
+    alert("Error adding user");
+  }
 }
 
-// Update User
-function updateUser() {
+// Update user
+async function updateUser() {
   const id = document.getElementById("userId").value;
-  if (!id) return alert("Enter User ID to update");
+  if (!id) return alert("Enter User ID");
 
-  const data = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    password: document.getElementById("password").value,
-  };
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-  apiFetch(`${API_BASE}/users/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  })
-    .then(res => res.json())
-    .then(() => {
-      alert("User updated successfully!");
-      fetchUsers();
-    })
-    .catch(err => console.error("Error updating user:", err));
+  try {
+    await apiFetch(`/users/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({ name, email, password }),
+    });
+    alert("User updated successfully!");
+    fetchUsers();
+  } catch (err) {
+    console.error(err);
+    alert("Error updating user");
+  }
 }
 
-// Delete User
-function deleteUser() {
+// Delete user
+async function deleteUser() {
   const id = document.getElementById("userId").value;
-  if (!id) return alert("Enter User ID to delete");
+  if (!id) return alert("Enter User ID");
 
-  apiFetch(`${API_BASE}/users/${id}`, { method: "DELETE" })
-    .then(() => {
-      alert("User deleted successfully!");
-      fetchUsers();
-    })
-    .catch(err => console.error("Error deleting user:", err));
+  try {
+    await apiFetch(`/users/${id}`, { method: "DELETE" });
+    alert("User deleted successfully!");
+    fetchUsers();
+  } catch (err) {
+    console.error(err);
+    alert("Error deleting user");
+  }
 }
 
-window.fetchUsers = fetchUsers;
+// Load users on page load
 document.addEventListener("DOMContentLoaded", fetchUsers);
-

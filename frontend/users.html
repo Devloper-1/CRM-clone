@@ -105,20 +105,7 @@
 
     </main>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-            const users = await apiFetch("http://127.0.0.1:8000/users");
-            console.log(users);
-
-            // Example: render in a table
-            const tbody = document.getElementById("usersTableBody");
-            users.forEach(u => {
-                const row = `<tr><td>${u.id}</td><td>${u.name}</td><td>${u.email}</td></tr>`;
-                tbody.innerHTML += row;
-            });
-        });
-    </script>
-
+    
 </body>
 
 </html>

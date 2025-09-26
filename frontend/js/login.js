@@ -1,3 +1,7 @@
+// login.js
+// ----------------------
+// Handles login page
+// ----------------------
 async function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -6,26 +10,28 @@ async function login() {
     const res = await fetch(`${API_BASE}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password }),
     });
 
-    if (res.ok) {
-      const data = await res.json();
-      sessionStorage.setItem("token", data.access_token);
-      sessionStorage.setItem("userEmail", email);
-      window.location.href = "/frontend/dashboard.html";
-    } else {
-      const error = await res.json();
-      alert("Login failed: " + error.detail);
-    }
+    if (!res.ok) throw new Error("Invalid credentials");
+
+    const data = await res.json();
+    sessionStorage.setItem("token", data.token);
+
+    // redirect after login
+    window.location.href = sessionStorage.getItem("redirect") || "/frontend/dashboard.html";
+    sessionStorage.removeItem("redirect");
+
   } catch (err) {
-    alert("Error: " + err.message);
+    alert("Login failed: " + err.message);
   }
 }
 
-
-  // Run after DOM is loaded
-  document.addEventListener("DOMContentLoaded", () => {
-    setupToggle("togglePassword", "password");
+// Password toggle
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("togglePassword");
+  const pwd = document.getElementById("password");
+  toggle.addEventListener("click", () => {
+    pwd.type = pwd.type === "password" ? "text" : "password";
   });
-
+});

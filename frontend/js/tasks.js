@@ -2,13 +2,12 @@
 // CRM Task JS — CRUD
 // ================================
 
-const API_BASE = ""; // same host as frontend
 
 // ================================
 // Fetch All Tasks
 // ================================
 function fetchTasks() {
-  fetch(`${API_BASE}/tasks/`)
+  apiFetch(`${API_BASE}/tasks/`)
     .then(res => {
       if (!res.ok) throw new Error("Network error");
       return res.json();
@@ -50,7 +49,7 @@ function addTask() {
     status: document.getElementById("status").value,
   };
 
-  fetch(`${API_BASE}/tasks`, {
+  apiFetch(`${API_BASE}/tasks`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(taskData),
@@ -76,7 +75,7 @@ function updateTask() {
     status: document.getElementById("status").value,
   };
 
-  fetch(`${API_BASE}/tasks/${id}`, {
+  apiFetch(`${API_BASE}/tasks/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(taskData),

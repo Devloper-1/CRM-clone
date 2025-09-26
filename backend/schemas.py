@@ -13,7 +13,6 @@ class UserCreate(BaseModel):
     password: str
 
 class UserUpdate(BaseModel):
-    id: Optional[int] = None
     name: Optional[str] = None
     email: Optional[EmailStr] = None
     password: Optional[str] = None
@@ -22,11 +21,18 @@ class UserResponse(BaseModel):
     id: int
     name: str
     email: EmailStr
-    password: str
 
     model_config = ConfigDict(from_attributes=True)
 
+# Login/Register schemas
+class RegisterData(BaseModel):
+    name: str
+    email: EmailStr
+    password: str
 
+class LoginData(BaseModel):
+    email: EmailStr
+    password: str
 # ==================================================
 # 🧰 CLIENTS
 # ==================================================

@@ -1,3 +1,4 @@
+// clients._ui.js
 // Run after DOM is loaded
 document.addEventListener("DOMContentLoaded", async () => {
 // Attach click handler to existing table rows

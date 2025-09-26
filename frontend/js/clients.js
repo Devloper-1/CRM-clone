@@ -1,5 +1,5 @@
 // ================================
-// CRM Client JS — Modern Approach
+// CRM Clients JS — Modern Approach
 // ================================
 
 // ------------------------
@@ -7,7 +7,7 @@
 // ------------------------
 async function fetchClients() {
   try {
-    const data = await apiFetch("/clients/"); // uses token automatically
+    const data = await apiFetch("/clients"); // uses token automatically
 
     const container = document.getElementById("clientsTable");
     if (!container) return console.error("❌ clientsTable element not found");

@@ -1,3 +1,4 @@
+<!-- clients.html -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -102,18 +103,7 @@
 
   </main>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      const clients = await apiFetch("http://127.0.0.1:8000/clients");
-      console.log(clients);
-
-      const tbody = document.getElementById("clientsTableBody");
-      clients.forEach(c => {
-        const row = `<tr><td>${c.id}</td><td>${c.name}</td><td>${c.email}</td></tr>`;
-        tbody.innerHTML += row;
-      });
-    });
-  </script>
+  
 
 
 </body>
