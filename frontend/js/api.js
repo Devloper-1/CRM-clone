@@ -1,11 +1,16 @@
-// api.js
+// ============================================================
+// File: /frontend/js/api.js
+// Description: Helper functions for API requests with JWT support.
+//              Automatically handles token validation, logout, and JSON parsing.
+// ============================================================
+
 // ----------------------
-// Helper for API requests
+// API FETCH WITH JWT
 // ----------------------
 async function apiFetch(url, options = {}) {
   const token = sessionStorage.getItem("token");
   if (!token) {
-    // redirect to login if no token
+    // Redirect to login if no token
     sessionStorage.setItem("redirect", window.location.pathname);
     window.location.href = "/frontend/login.html";
     return;
@@ -21,16 +26,23 @@ async function apiFetch(url, options = {}) {
   });
 
   if (res.status === 401) {
-    // unauthorized → logout
+    // Unauthorized → logout
     sessionStorage.clear();
+    alert("⚠️ Session expired. Please log in again.");
     window.location.href = "/frontend/login.html";
     return;
+  }
+
+  if (!res.ok) {
+    throw new Error(`API error: ${res.status}`);
   }
 
   return res.json();
 }
 
-// Logout function
+// ----------------------
+// LOGOUT
+// ----------------------
 function logout() {
   sessionStorage.clear();
   window.location.href = "/frontend/login.html";

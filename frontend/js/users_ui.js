@@ -1,9 +1,13 @@
-// users_ui.js
-// ----------------------
-// Handles UI interactions for Users page
-// ----------------------
+// ============================================================
+// File: /frontend/js/users_ui.js
+// Description: Handles UI interactions for Users page.
+//              Populates forms, manages sidebar, toggles password visibility.
+// ============================================================
+
 document.addEventListener("DOMContentLoaded", () => {
-  // Fill form on row click
+  // ----------------------
+  // FILL FORM ON ROW CLICK
+  // ----------------------
   document.getElementById("usersTable").addEventListener("click", e => {
     const row = e.target.closest("tr");
     if (!row) return;
@@ -17,12 +21,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("password").value = cells[3].textContent.trim() === "N/A" ? "" : cells[3].textContent.trim();
   });
 
-  // Clear form
+  // ----------------------
+  // CLEAR FORM
+  // ----------------------
   document.getElementById("clearbtn").addEventListener("click", () => {
     document.getElementById("userForm").reset();
   });
 
-  // Sidebar toggle
+  // ----------------------
+  // SIDEBAR TOGGLE
+  // ----------------------
   const menuToggle = document.getElementById("menuToggle");
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("overlay");
@@ -37,7 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.classList.add("hidden");
   });
 
-  // Password toggle
+  // ----------------------
+  // PASSWORD TOGGLE
+  // ----------------------
   const passwordInput = document.getElementById("password");
   const toggleBtn = document.getElementById("togglePassword");
   toggleBtn.addEventListener("click", () => {

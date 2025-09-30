@@ -18,7 +18,7 @@
   <!-- Page-specific scripts -->
   <script src="/frontend/js/tasks.js" defer></script>
   <script src="/frontend/js/tasks_ui.js" defer></script>
-  
+
 </head>
 
 
@@ -40,6 +40,7 @@
     <div class="p-4 font-semibold border-b">Menu</div>
     <ul class="p-4 space-y-2">
       <li><a href="dashboard.html" class="block p-2 hover:bg-gray-200 rounded">Dashboard</a></li>
+      <li><a href="users.html" class="block p-2 hover:bg-gray-200 rounded">Users</a></li>
       <li><a href="clients.html" class="block p-2 hover:bg-gray-200 rounded">Clients</a></li>
       <li><a href="payments.html" class="block p-2 hover:bg-gray-200 rounded">Payments</a></li>
     </ul>
@@ -56,15 +57,15 @@
       <table class="min-w-full border border-gray-300">
         <thead class="bg-gray-200">
           <tr>
-            <th class="border px-4 py-2">ID</th>
-            <th class="border px-4 py-2">Client ID</th>
-            <th class="border px-4 py-2">Description</th>
-            <th class="border px-4 py-2">Status</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">ID</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">Client ID</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">Description</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
           </tr>
         </thead>
-        <tbody id="tasksTable">
+        <tbody id="tasksTable" class="divide-y divide-gray-300">
           <tr>
-            <td colspan="4" class="text-center py-3">Loading...</td>
+            <td colspan="4" class="px-4 py-2 text-center text-gray-500">Loading...</td>
           </tr>
         </tbody>
       </table>
@@ -92,7 +93,7 @@
     </form>
   </main>
 
-  
+
 
 </body>
 

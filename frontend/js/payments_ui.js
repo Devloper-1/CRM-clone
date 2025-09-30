@@ -1,14 +1,19 @@
-// ================================
-// UI Interactions for Payments
-// ================================
+// ============================================================
+// File: frontend/js/payments_ui.js
+// Description: UI interactions for Payments page
+// ============================================================
+
 document.addEventListener("DOMContentLoaded", () => {
   const table = document.getElementById("paymentsTable");
   const form = document.getElementById("paymentForm");
 
-  // Row click → fill form
-  table.addEventListener("click", e => {
+  // ----------------------
+  // Fill form on row click
+  // ----------------------
+  table.addEventListener("click", (e) => {
     const row = e.target.closest("tr");
     if (!row) return;
+
     const cells = row.querySelectorAll("td");
     if (cells.length < 6) return;
 
@@ -19,12 +24,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("status").value = cells[4].textContent.trim();
   });
 
+  // ----------------------
   // Clear form
+  // ----------------------
   document.getElementById("clearbtn").addEventListener("click", () => {
     form.reset();
   });
 
+  // ----------------------
   // Sidebar toggle
+  // ----------------------
   const menuToggle = document.getElementById("menuToggle");
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("overlay");

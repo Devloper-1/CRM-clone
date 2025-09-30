@@ -4,25 +4,21 @@
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Body
 from sqlalchemy.orm import Session
-from typing import Optional
+from typing import Optional , List
 from backend import models
 from backend.schemas import PaymentCreate, PaymentUpdate, PaymentResponse
 from backend.database import get_db
-from backend.utils.auth_utils import verify_token
+from backend.utils.auth_utils import create_access_token, verify_token
 
 # ✅ Router setup
-router = APIRouter(prefix="/payments", tags=["Payments"])
+router = APIRouter(
+    prefix="/payments",
+    tags=["Payments"],
+    dependencies=[Depends(verify_token)]
+      )
 
 # ================================
-# Login Token
-# ================================
-@router.get("/payments")
-def get_payment(token: str= Depends(verify_token) , db: Session= Depends(get_db)):
-    payments= db.query(models.Payment).all()
-    return payments
-
-# ================================
-# 1️⃣ Get Payments
+# 1️⃣ Get Payments (with token)
 # ================================
 @router.get("/", response_model=list[PaymentResponse])
 def get_payments(
@@ -43,7 +39,10 @@ def get_payments(
 # 2️⃣ Create Payment
 # ================================
 @router.post("/", response_model=PaymentResponse, status_code=201)
-def create_payment(payment: PaymentCreate, db: Session = Depends(get_db)):
+def create_payment(
+    payment: PaymentCreate,
+    db: Session = Depends(get_db)
+):
     """Create a new payment"""
     db_payment = models.Payment(**payment.model_dump())  # ✅ Pydantic v2
     db.add(db_payment)
@@ -79,7 +78,10 @@ def update_payment(
 # 4️⃣ Delete Payment by ID
 # ================================
 @router.delete("/{payment_id}")
-def delete_payment(payment_id: int, db: Session = Depends(get_db)):
+def delete_payment(
+    payment_id: int,
+    db: Session = Depends(get_db)
+):
     """Delete a payment by its ID"""
     db_payment = db.query(models.Payment).filter(models.Payment.id == payment_id).first()
     if not db_payment:

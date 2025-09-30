@@ -1,11 +1,20 @@
+# ============================================================
+# File: backend/routers/auth.py
+# Description: Auth routes (register, login, logout)
+# ============================================================
+
+# ============================================================
+# Import 
+# ============================================================
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
-import time
+from datetime import timedelta
 from backend import models
 from backend.database import get_db
-from backend.utils.auth_utils import active_tokens
+from backend.utils.auth_utils import  create_access_token,ACCESS_TOKEN_EXPIRE_MINUTES
+
 
 router = APIRouter()
 
@@ -54,16 +63,18 @@ def login(data: LoginData, db: Session = Depends(get_db)):
     if not user or not pwd_context.verify(data.password, user.password):
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
-    token = f"{data.email}-{int(time.time())}"
-    active_tokens[token] = True
-    return {"token": token}
+    token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    token = create_access_token(data={"sub": user.email }, expire_delta=token_expires)
+    
+    # Returning both "token" (legacy) and "access_token" (standard)
+    return {"access_token": token, "token_type": "bearer", "token": token}
 
 # =========================
 # Logout
 # =========================
 @router.post("/logout")
-def logout(token: str):
-    if token in active_tokens:
-        del active_tokens[token]
-        return {"message": "Logged out"}
-    raise HTTPException(status_code=401, detail="Invalid token")
+def logout():
+    """
+    JWT is stateless → Logout = client deletes token.
+    """
+    return {"message": "Logout successful (delete token on client side)"}

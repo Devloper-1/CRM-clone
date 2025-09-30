@@ -1,14 +1,14 @@
-// ================================
-// CRM Clients JS — Modern Approach
-// ================================
+// ============================================================
+// File: frontend/js/clients.js
+// Description: API CRUD operations for Clients (JWT protected)
+// ============================================================
 
-// ------------------------
-// Fetch All Clients
-// ------------------------
+// ----------------------
+// CLIENT FETCH ALL
+// ----------------------
 async function fetchClients() {
   try {
-    const data = await apiFetch("/clients"); // uses token automatically
-
+    const data = await apiFetch("/clients");
     const container = document.getElementById("clientsTable");
     if (!container) return console.error("❌ clientsTable element not found");
 
@@ -20,14 +20,15 @@ async function fetchClients() {
     }
 
     data.forEach(client => {
-      container.innerHTML += `
-        <tr>
-          <td>${client.id}</td>
-          <td>${client.user_id}</td>
-          <td>${client.name}</td>
-          <td>${client.email}</td>
-          <td>${client.phone ?? "N/A"}</td>
-        </tr>`;
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="border px-4 py-2">${client.id}</td>
+        <td class="border px-4 py-2">${client.user_id}</td>
+        <td class="border px-4 py-2">${client.name}</td>
+        <td class="border px-4 py-2">${client.email}</td>
+        <td class="border px-4 py-2">${client.phone ?? "N/A"}</td>
+      `;
+      container.appendChild(row);
     });
   } catch (err) {
     console.error("Error fetching clients:", err);
@@ -36,9 +37,9 @@ async function fetchClients() {
   }
 }
 
-// ------------------------
-// Add New Client
-// ------------------------
+// ----------------------
+// CLIENT ADD
+// ----------------------
 async function addClient() {
   const clientData = {
     user_id: document.getElementById("userId").value,
@@ -48,20 +49,18 @@ async function addClient() {
   };
 
   try {
-    await apiFetch("/clients", {
-      method: "POST",
-      body: JSON.stringify(clientData),
-    });
+    await apiFetch("/clients", { method: "POST", body: JSON.stringify(clientData) });
     alert("Client added successfully!");
     fetchClients();
   } catch (err) {
     console.error("Error adding client:", err);
+    alert("Error adding client");
   }
 }
 
-// ------------------------
-// Update Existing Client
-// ------------------------
+// ----------------------
+// CLIENT UPDATE
+// ----------------------
 async function updateClient() {
   const id = document.getElementById("clientId").value;
   if (!id) return alert("Please enter Client ID to update");
@@ -74,20 +73,18 @@ async function updateClient() {
   };
 
   try {
-    await apiFetch(`/clients/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(clientData),
-    });
+    await apiFetch(`/clients/${id}`, { method: "PUT", body: JSON.stringify(clientData) });
     alert("Client updated successfully!");
     fetchClients();
   } catch (err) {
     console.error("Error updating client:", err);
+    alert("Error updating client");
   }
 }
 
-// ------------------------
-// Delete Client
-// ------------------------
+// ----------------------
+// CLIENT DELETE
+// ----------------------
 async function deleteClient() {
   const id = document.getElementById("clientId").value;
   if (!id) return alert("Please enter Client ID to delete");
@@ -98,12 +95,13 @@ async function deleteClient() {
     fetchClients();
   } catch (err) {
     console.error("Error deleting client:", err);
+    alert("Error deleting client");
   }
 }
 
-// ------------------------
+// ----------------------
 // Expose functions globally
-// ------------------------
+// ----------------------
 window.fetchClients = fetchClients;
 window.addClient = addClient;
 window.updateClient = updateClient;

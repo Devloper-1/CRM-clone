@@ -1,12 +1,15 @@
-// users.js
-// ----------------------
-// API CRUD for Users
-// ----------------------
+// ============================================================
+// File: /frontend/js/users.js
+// Description: Handles all API CRUD operations for Users.
+//              JWT protected, communicates with backend.
+// ============================================================
 
-// Fetch & display all users
+// ----------------------
+// FETCH ALL USERS
+// ----------------------
 async function fetchUsers() {
   try {
-    const users = await apiFetch("/users");
+    const users = await apiFetch("/users/");
     const table = document.getElementById("usersTable");
     table.innerHTML = "";
 
@@ -31,7 +34,9 @@ async function fetchUsers() {
   }
 }
 
-// Add user
+// ----------------------
+// USER ADD
+// ----------------------
 async function addUser() {
   const name = document.getElementById("name").value;
   const email = document.getElementById("email").value;
@@ -50,7 +55,9 @@ async function addUser() {
   }
 }
 
-// Update user
+// ----------------------
+// USER UPDATE
+// ----------------------
 async function updateUser() {
   const id = document.getElementById("userId").value;
   if (!id) return alert("Enter User ID");
@@ -72,7 +79,9 @@ async function updateUser() {
   }
 }
 
-// Delete user
+// ----------------------
+// USER DELETE
+// ----------------------
 async function deleteUser() {
   const id = document.getElementById("userId").value;
   if (!id) return alert("Enter User ID");
@@ -87,5 +96,7 @@ async function deleteUser() {
   }
 }
 
-// Load users on page load
+// ----------------------
+// INIT USERS TABLE ON PAGE LOAD
+// ----------------------
 document.addEventListener("DOMContentLoaded", fetchUsers);

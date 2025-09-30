@@ -1,24 +1,22 @@
-# ================================
+# ============================================================
 # 📂 backend/routers/clients.py
-# ================================
+# Description: CRUD operations for clients (JWT protected)
+# ============================================================
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Body
 from sqlalchemy.orm import Session
-from typing import Optional
+from typing import Optional, List
 from backend import models
 from backend.schemas import ClientCreate, ClientUpdate, ClientResponse
 from backend.database import get_db
 from backend.utils.auth_utils import verify_token
 
-router = APIRouter(prefix="/clients", tags=["Clients"])
+router = APIRouter(
+    prefix="/clients",
+    tags=["Clients"],
+    dependencies=[Depends(verify_token)]  # <-- all routes now JWT protected
+)
 
-# ================================
-# Login Token
-# ================================
-@router.get("/clients")
-def get_clients(token: str= Depends(verify_token) , db: Session= Depends(get_db) ):
-    clients= db.query(models.Client).all()
-    return clients
 
 # ================================
 # 1️⃣ Get Clients
@@ -28,6 +26,7 @@ def get_clients(
     id: Optional[int] = Query(None),
     user_id: Optional[int] = Query(None),
     db: Session = Depends(get_db)
+    
 ):
     """Fetch all clients or filter by ID / User ID"""
     query = db.query(models.Client)

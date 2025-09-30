@@ -4,13 +4,17 @@
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Body
 from sqlalchemy.orm import Session
-from typing import Optional
+from typing import Optional , List
 from backend import models
 from backend.schemas import TaskCreate, TaskUpdate, TaskResponse
 from backend.database import get_db
 from backend.utils.auth_utils import verify_token
 
-router = APIRouter(prefix="/tasks", tags=["Tasks"])
+router = APIRouter(
+    prefix="/tasks",
+    tags=["Tasks"],
+    dependencies=[Depends(verify_token)]
+      )
 
 # ================================
 # Login Token

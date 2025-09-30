@@ -1,51 +1,51 @@
-// ================================
-// CRM Payment JS — CRUD
-// ================================
+// ============================================================
+// File: frontend/js/payments.js
+// Description: API CRUD operations for Payments (JWT protected)
+// ============================================================
 
-const API_BASE = "";
+// ----------------------
+// PAYMENT FETCH ALL
+// ----------------------
+async function fetchPayments() {
+  try {
+    const data = await apiFetch("/payments/");
+    const container = document.getElementById("paymentsTable");
+    if (!container) return console.error("❌ paymentsTable element not found");
 
-// ================================
-// Fetch All Payments
-// ================================
-function fetchPayments() {
-  fetch(`${API_BASE}/payments/`)
-    .then(res => {
-      if (!res.ok) throw new Error("Network error");
-      return res.json();
-    })
-    .then(data => {
-      const container = document.getElementById("paymentsTable");
-      container.innerHTML = "";
+    container.innerHTML = "";
 
-      if (data.length === 0) {
-        container.innerHTML = `<tr><td colspan="6" class="text-center py-3">No payments found</td></tr>`;
-        return;
-      }
+    if (!data || data.length === 0) {
+      container.innerHTML = `<tr><td colspan="6" class="text-center py-3">No payments found</td></tr>`;
+      return;
+    }
 
-      data.forEach(pay => {
-        const row = `
-          <tr>
-            <td>${pay.id}</td>
-            <td>${pay.client_id}</td>
-            <td>${pay.task_id ?? "N/A"}</td>
-            <td>${pay.amount}</td>
-            <td>${pay.status}</td>
-            <td>${pay.created_at ?? "N/A"}</td>
-          </tr>`;
-        container.innerHTML += row;
-      });
-    })
-    .catch(err => {
-      console.error("Error fetching payments:", err);
-      document.getElementById("paymentsTable").innerHTML =
-        `<tr><td colspan="6" class="text-center text-red-600">Error loading payments</td></tr>`;
+    data.forEach(pay => {
+      const task = pay.task_id ?? "N/A";
+      const created = pay.created_at ?? "N/A";
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="border px-4 py-2">${pay.id}</td>
+        <td class="border px-4 py-2">${pay.client_id}</td>
+        <td class="border px-4 py-2">${task}</td>
+        <td class="border px-4 py-2">${pay.amount}</td>
+        <td class="border px-4 py-2">${pay.status}</td>
+        <td class="border px-4 py-2">${created}</td>
+      `;
+      container.appendChild(row);
     });
+  } catch (err) {
+    console.error("Error fetching payments:", err);
+    document.getElementById(
+      "paymentsTable"
+    ).innerHTML = `<tr><td colspan="6" class="text-center text-red-600">Error loading payments</td></tr>`;
+  }
 }
 
-// ================================
-// Add Payment
-// ================================
-function addPayment() {
+// ----------------------
+// PAYMENT ADD
+// ----------------------
+async function addPayment() {
   const paymentData = {
     client_id: document.getElementById("clientId").value,
     task_id: document.getElementById("taskId").value || null,
@@ -53,23 +53,20 @@ function addPayment() {
     status: document.getElementById("status").value,
   };
 
-  fetch(`${API_BASE}/payments`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(paymentData),
-  })
-    .then(res => res.json())
-    .then(() => {
-      alert("Payment added successfully!");
-      fetchPayments();
-    })
-    .catch(err => console.error("Error adding payment:", err));
+  try {
+    await apiFetch("/payments", { method: "POST", body: JSON.stringify(paymentData) });
+    alert("Payment added successfully!");
+    fetchPayments();
+  } catch (err) {
+    console.error("Error adding payment:", err);
+    alert("Error adding payment");
+  }
 }
 
-// ================================
-// Update Payment
-// ================================
-function updatePayment() {
+// ----------------------
+// PAYMENT UPDATE
+// ----------------------
+async function updatePayment() {
   const id = document.getElementById("paymentId").value;
   if (!id) return alert("Please enter Payment ID");
 
@@ -80,33 +77,42 @@ function updatePayment() {
     status: document.getElementById("status").value,
   };
 
-  fetch(`${API_BASE}/payments/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(paymentData),
-  })
-    .then(res => res.json())
-    .then(() => {
-      alert("Payment updated successfully!");
-      fetchPayments();
-    })
-    .catch(err => console.error("Error updating payment:", err));
+  try {
+    await apiFetch(`/payments/${id}`, { method: "PUT", body: JSON.stringify(paymentData) });
+    alert("Payment updated successfully!");
+    fetchPayments();
+  } catch (err) {
+    console.error("Error updating payment:", err);
+    alert("Error updating payment");
+  }
 }
 
-// ================================
-// Delete Payment
-// ================================
-function deletePayment() {
+// ----------------------
+// PAYMENT DELETE
+// ----------------------
+async function deletePayment() {
   const id = document.getElementById("paymentId").value;
   if (!id) return alert("Please enter Payment ID");
 
-  fetch(`${API_BASE}/payments/${id}`, { method: "DELETE" })
-    .then(() => {
-      alert("Payment deleted successfully!");
-      fetchPayments();
-    })
-    .catch(err => console.error("Error deleting payment:", err));
+  try {
+    await apiFetch(`/payments/${id}`, { method: "DELETE" });
+    alert("Payment deleted successfully!");
+    fetchPayments();
+  } catch (err) {
+    console.error("Error deleting payment:", err);
+    alert("Error deleting payment");
+  }
 }
 
+// ----------------------
+// Expose functions globally
+// ----------------------
 window.fetchPayments = fetchPayments;
+window.addPayment = addPayment;
+window.updatePayment = updatePayment;
+window.deletePayment = deletePayment;
+
+// ----------------------
+// Load payments on page load
+// ----------------------
 document.addEventListener("DOMContentLoaded", fetchPayments);

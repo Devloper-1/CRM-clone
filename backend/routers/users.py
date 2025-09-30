@@ -1,17 +1,23 @@
 from fastapi import APIRouter, HTTPException, Depends, Body, Query
 from sqlalchemy.orm import Session
-from typing import Optional
+from typing import Optional , List
 from backend import models
 from backend.schemas import UserCreate, UserUpdate, UserResponse, RegisterData, LoginData
 from backend.database import get_db
-from backend.utils.auth_utils import active_tokens, verify_token
+from backend.utils.auth_utils import create_access_token, verify_token
 from passlib.context import CryptContext
-import time
+from datetime import timedelta
 
-router = APIRouter(prefix="/users", tags=["Users"])
+router = APIRouter(
+    prefix="/users",
+    tags=["Users"],
+    dependencies=[Depends(verify_token)]
+      )
 
 # bcrypt context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
+
 
 # ----------------------
 # Register
@@ -38,33 +44,24 @@ def login(data: LoginData, db: Session = Depends(get_db)):
     if not user or not pwd_context.verify(data.password, user.password):
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
-    # simple in-memory token
-    token = f"{user.email}-{int(time.time())}"
-    active_tokens[token] = user.id
-    return {"token": token}
+    token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    token = create_access_token(data={"sub": user.email}, expires_delta=token_expires)
 
-# ----------------------
-# Logout
-# ----------------------
-@router.post("/logout")
-def logout(token: str):
-    if token in active_tokens:
-        del active_tokens[token]
-        return {"message": "Logged out"}
-    raise HTTPException(status_code=401, detail="Invalid token")
+    return {"access_token": token, "token_type": "bearer"}
+
 
 # ----------------------
 # Get users (protected)
 # ----------------------
 @router.get("/", response_model=list[UserResponse])
-def get_users(db: Session = Depends(get_db), token: str = Depends(verify_token)):
+def get_users(db: Session = Depends(get_db)):
     return db.query(models.User).all()
 
 # ----------------------
 # Update user (protected)
 # ----------------------
 @router.put("/{user_id}", response_model=UserResponse)
-def update_user(user_id: int, user_update: UserUpdate = Body(...), db: Session = Depends(get_db), token: str = Depends(verify_token)):
+def update_user(user_id: int, user_update: UserUpdate = Body(...), db: Session = Depends(get_db)):
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -84,7 +81,7 @@ def update_user(user_id: int, user_update: UserUpdate = Body(...), db: Session =
 # Delete user (protected)
 # ----------------------
 @router.delete("/{user_id}")
-def delete_user(user_id: int, db: Session = Depends(get_db), token: str = Depends(verify_token)):
+def delete_user(user_id: int, db: Session = Depends(get_db)):
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")

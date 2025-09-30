@@ -1,14 +1,19 @@
-// ================================
-// UI Interactions for Tasks
-// ================================
+// ============================================================
+// File: frontend/js/tasks_ui.js
+// Description: UI interactions for Tasks page
+// ============================================================
+
 document.addEventListener("DOMContentLoaded", () => {
   const table = document.getElementById("tasksTable");
   const form = document.getElementById("taskForm");
 
-  // Row click → fill form
-  table.addEventListener("click", e => {
+  // ----------------------
+  // Fill form on row click
+  // ----------------------
+  table.addEventListener("click", (e) => {
     const row = e.target.closest("tr");
     if (!row) return;
+
     const cells = row.querySelectorAll("td");
     if (cells.length < 4) return;
 
@@ -18,12 +23,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("status").value = cells[3].textContent.trim();
   });
 
+  // ----------------------
   // Clear form
+  // ----------------------
   document.getElementById("clearbtn").addEventListener("click", () => {
     form.reset();
   });
 
+  // ----------------------
   // Sidebar toggle
+  // ----------------------
   const menuToggle = document.getElementById("menuToggle");
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("overlay");
