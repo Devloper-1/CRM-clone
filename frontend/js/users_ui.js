@@ -1,10 +1,12 @@
 // ============================================================
 // File: /frontend/js/users_ui.js
 // Description: Handles UI interactions for Users page.
-//              Populates forms, manages sidebar, toggles password visibility.
+//              Populates forms, manages sidebar, toggles password visibility,
+//              and implements live search dynamically.
 // ============================================================
 
 document.addEventListener("DOMContentLoaded", () => {
+
   // ----------------------
   // FILL FORM ON ROW CLICK
   // ----------------------
@@ -13,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!row) return;
 
     const cells = row.querySelectorAll("td");
-    if (cells.length < 4) return;
+    if (cells.length < 4) return; // skip loading or empty rows
 
     document.getElementById("userId").value = cells[0].textContent.trim();
     document.getElementById("name").value = cells[1].textContent.trim();
@@ -55,4 +57,5 @@ document.addEventListener("DOMContentLoaded", () => {
     passwordInput.type = isHidden ? "text" : "password";
     toggleBtn.textContent = isHidden ? "🙈" : "👁️";
   });
+
 });

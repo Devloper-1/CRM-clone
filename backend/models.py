@@ -1,4 +1,7 @@
-# CRM\backend\models.py
+# ============================================================
+# File: backend/models.py
+# Description: SQLAlchemy ORM models for Users, Clients, Tasks, and Payments
+# ============================================================
 from sqlalchemy import Column, Integer, String, ForeignKey, Float
 from sqlalchemy.orm import relationship
 from backend.database import Base

@@ -1,25 +1,57 @@
-# CRM/tests/conftest.py
+# ============================================================
+# File: tests/conftest.py
+# Description: Shared pytest fixtures for DB setup & JWT client
+# ============================================================
+
 import pytest
-import subprocess
 from fastapi.testclient import TestClient
 from backend.main import app
 from backend.database import Base, engine
+from backend.seed import run as seed_db  # ✅ import directly
 
+# Base FastAPI test client
 client = TestClient(app)
 
-def pytest_addoption(parser):
-    parser.addoption("--seed", action="store_true", help="Seed the database before tests")
-
+# ---------------------------
+# DB Setup + Teardown
+# ---------------------------
 @pytest.fixture(scope="function", autouse=True)
-def setup_and_teardown_db(request):
-    """Clean DB before & after each test; optionally seed."""
+def setup_db():
+    """Drop & recreate DB, then seed data for tests."""
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
 
-    if request.config.getoption("--seed"):
-        print("🌱 Seeding database with sample data...")
-        subprocess.run(["python", "backend/seed.py"], check=True)
+    # Seed data directly
+    seed_db(reset=False)
 
     yield
-
     Base.metadata.drop_all(bind=engine)
+
+
+# ---------------------------
+# JWT Authenticated Client
+# ---------------------------
+@pytest.fixture
+def auth_client():
+    """
+    Returns a client with Authorization header set.
+    Registers and logs in a default test user automatically.
+    """
+    # Register user
+    client.post("/register", json={
+        "name": "Test User",
+        "email": "testuser@example.com",
+        "password": "testpass"
+    })
+
+    # Login to get token
+    res = client.post("/login", json={
+        "email": "testuser@example.com",
+        "password": "testpass"
+    })
+    assert res.status_code == 200
+    token = res.json()["access_token"]
+
+    # Attach token to client headers
+    client.headers.update({"Authorization": f"Bearer {token}"})
+    return client

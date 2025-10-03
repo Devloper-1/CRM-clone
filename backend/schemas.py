@@ -1,4 +1,7 @@
-# CRM/backend/schemas.py
+# ============================================================
+# File: backend/schemas.py
+# Description: Pydantic schemas for Users, Clients, Tasks, and Payments
+# ============================================================
 from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import Optional
 from datetime import datetime
