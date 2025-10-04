@@ -7,7 +7,7 @@
 // ----------------------
 // API FETCH WITH JWT
 // ----------------------
-async function apiFetch(url, options = {}) {
+async function apiFetch(url, options = {} , raw = false) {
   const token = sessionStorage.getItem("token");
   if (!token) {
     // Redirect to login if no token
@@ -36,6 +36,9 @@ async function apiFetch(url, options = {}) {
   if (!res.ok) {
     throw new Error(`API error: ${res.status}`);
   }
+
+  // Return raw response if requested (for CSV or files)
+  if (raw) return res;
 
   return res.json();
 }

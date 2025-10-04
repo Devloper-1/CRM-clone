@@ -93,3 +93,33 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
     db.delete(db_task)
     db.commit()
     return {"message": f"Task {task_id} deleted"}
+
+# ================================
+# 5️⃣ Export Tasks to CSV
+# ================================
+@router.get("/export/csv")
+def export_csv(db: Session = Depends(get_db)):
+     """Export all tasks as a CSV file"""
+     tasks = db.query(models.Task).all()
+
+     # Use an in-memory buffer
+     buffer = io.StringIO()
+     writer = csv.writer(buffer)
+
+      # Write CSV header
+     writer.writerow(["id","client_id","description","status"])
+
+     # Write task rows
+     for task in tasks :
+         writer.writerow([
+           task.id ,
+           task.client_id,
+           task.description,
+           task.status
+         ])
+     buffer.seek(0)
+     return StreamingResponse(
+        buffer,
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=tasks.csv"}
+    )
