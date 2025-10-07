@@ -50,3 +50,11 @@ function logout() {
   sessionStorage.clear();
   window.location.href = "/frontend/login.html";
 }
+
+// ----------------------
+// EXPORT TO GLOBAL SCOPE
+// ----------------------
+window.apiFetch = apiFetch;
+window.logout = logout;
+
+console.log("✅ api.js loaded and apiFetch ready");

@@ -97,6 +97,50 @@ async function deleteUser() {
 }
 
 // ----------------------
+// EXPORT Users TO CSV
+// ----------------------
+async function  exportusers() {
+  alert("✅ Export button clicked!");
+
+  const token = sessionStorage.getItem("token");
+  if(!token){
+    alert("⚠️ You are not logged in!");
+    window.location.href = "/frontend/login.html";
+    return;
+  }
+  try{
+    const res = await apiFetch("/users/export/csv", {} , true);
+    if (!res){
+      alert("❌ No response from server");
+      return;
+    }
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url ;
+    a.download = "users.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+    
+    alert("✅ Download triggered! Check your Downloads folder.");
+
+  }
+  catch(err){
+    onsole.error("Error exporting payments:", err);
+    alert("❌ Failed to export payments. See console.");
+  }
+}
+
+
+
+// ----------------------
+// Expose functions globally
+// ----------------------
+window.exportusers = exportusers;
+// ----------------------
 // INIT USERS TABLE ON PAGE LOAD
 // ----------------------
 document.addEventListener("DOMContentLoaded", fetchUsers);

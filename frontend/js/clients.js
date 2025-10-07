@@ -100,9 +100,51 @@ async function deleteClient() {
 }
 
 // ----------------------
+// EXPORT Clients TO CSV
+// ----------------------
+async function exportclients() {
+  alert("✅ Export button clicked!");
+
+  const token = sessionStorage.getItem("token");
+  if(!token){
+    alert("⚠️ You are not logged in!");
+    window.location.href = "/frontend/login.html";
+    return;
+  }
+
+  try{
+    const res = await apiFetch("/clients/export/csv" , {} , true);
+
+    if(!res){
+      alert("❌ No response from server");
+      return;
+    }
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url ;
+    a.download = "clients.csv"
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+
+    alert("✅ Download triggered! Check your Downloads folder.");
+  }
+   catch(err){
+    onsole.error("Error exporting payments:", err);
+    alert("❌ Failed to export payments. See console.");
+  }
+
+}
+
+// ----------------------
 // Expose functions globally
 // ----------------------
 window.fetchClients = fetchClients;
 window.addClient = addClient;
 window.updateClient = updateClient;
 window.deleteClient = deleteClient;
+window.exportclients = exportclients

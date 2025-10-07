@@ -9,6 +9,10 @@ from backend import models
 from backend.schemas import PaymentCreate, PaymentUpdate, PaymentResponse
 from backend.database import get_db
 from backend.utils.auth_utils import create_access_token, verify_token
+from fastapi.responses import StreamingResponse
+import io
+import csv 
+
 
 # ✅ Router setup
 router = APIRouter(
@@ -90,3 +94,38 @@ def delete_payment(
     db.delete(db_payment)
     db.commit()
     return {"message": f"Payment {payment_id} deleted"}
+
+
+# ================================
+# 5️⃣ Export Payments to CSV
+# ================================
+@router.get("/export/csv")
+def export_csv(db: Session = Depends(get_db)):
+    """Export all payments as a CSV file """
+    payments = db.query(models.Payment).all()
+
+    # Use Stringio (text buffer)
+    buffer = io.StringIO()
+    writer = csv.writer(buffer , lineterminator='\n')
+
+    # write payment rows
+    for payment in payments :
+        writer.writerow([
+             payment.id ,
+             payment.client_id ,
+             payment.task_id,
+             payment.amount,
+             payment.status,
+             payment.created_at
+             ])
+    #  Convert text buffer to bytes
+    buffer_bytes = io.BytesIO(buffer.getvalue().encode('utf-8'))
+    buffer.close()
+
+    return StreamingResponse(
+        buffer_bytes,
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=payments.csv"}
+    )
+        
+

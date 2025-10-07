@@ -10,6 +10,9 @@ from backend import models
 from backend.schemas import ClientCreate, ClientUpdate, ClientResponse
 from backend.database import get_db
 from backend.utils.auth_utils import verify_token
+from fastapi.responses import StreamingResponse 
+import io 
+import csv 
 
 router = APIRouter(
     prefix="/clients",
@@ -85,3 +88,35 @@ def delete_client(client_id: int, db: Session = Depends(get_db)):
     db.delete(db_client)
     db.commit()
     return {"message": f"Client {client_id} deleted"}
+
+# ================================
+# 5️⃣ Export User to CSV
+# ================================
+@router.get("/export/csv")
+def export_csv(db: Session = Depends(get_db)):
+    """Export all clients as a CSV file """
+    clients = db.query(models.Client).all()
+
+    # Use Stringio (text buffer)
+    buffer = io.StringIO()
+    writer = csv.writer(buffer , lineterminator='\n')
+
+    # write clients rows
+    for client in clients :
+        writer.writerow([
+            client.id ,
+            client.user_id,
+            client.name,
+            client.email,
+            client.phone
+        ])
+    #  Convert text buffer to bytes
+    buffer_bytes = io.BytesIO(buffer.getvalue().encode('utf-8'))
+    buffer.close()
+
+    return StreamingResponse(
+        buffer_bytes,
+        media_type="text/csv",
+        headers={"Content-Disposition":"attachment; filename=clients.csv"}
+    )
+

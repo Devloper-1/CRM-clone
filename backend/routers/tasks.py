@@ -13,6 +13,7 @@ from fastapi.responses import StreamingResponse
 import io
 import csv
 
+# ✅ Router setup
 router = APIRouter(
     prefix="/tasks",
     tags=["Tasks"],
@@ -99,27 +100,26 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
 # ================================
 @router.get("/export/csv")
 def export_csv(db: Session = Depends(get_db)):
-     """Export all tasks as a CSV file"""
-     tasks = db.query(models.Task).all()
+    """Export all tasks as a CSV file"""
+    tasks = db.query(models.Task).all()
 
-     # Use an in-memory buffer
-     buffer = io.StringIO()
-     writer = csv.writer(buffer)
+    # Use StringIO (text buffer)
+    buffer = io.StringIO()
+    writer = csv.writer(buffer, lineterminator='\n')
 
-      # Write CSV header
-     writer.writerow(["id","client_id","description","status"])
+    # Write CSV header
+    writer.writerow(["id", "client_id", "description", "status"])
 
-     # Write task rows
-     for task in tasks :
-         writer.writerow([
-           task.id ,
-           task.client_id,
-           task.description,
-           task.status
-         ])
-     buffer.seek(0)
-     return StreamingResponse(
-        buffer,
+    # Write task rows
+    for task in tasks:
+        writer.writerow([task.id, task.client_id, task.description, task.status])
+
+    # Convert text buffer to bytes
+    buffer_bytes = io.BytesIO(buffer.getvalue().encode('utf-8'))
+    buffer.close()
+
+    return StreamingResponse(
+        buffer_bytes,
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=tasks.csv"}
     )

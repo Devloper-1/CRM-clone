@@ -1,4 +1,8 @@
-from fastapi import APIRouter, HTTPException, Depends, Body, Query
+# ============================================================
+# 📂 backend/routers/users.py
+# Description: CRUD operations for users (JWT protected)
+# ============================================================
+from  fastapi import APIRouter, HTTPException, Depends, Body, Query
 from sqlalchemy.orm import Session
 from typing import Optional , List
 from backend import models
@@ -7,6 +11,10 @@ from backend.database import get_db
 from backend.utils.auth_utils import create_access_token, verify_token
 from passlib.context import CryptContext
 from datetime import timedelta
+from fastapi.responses import StreamingResponse
+import io
+import csv
+
 
 router = APIRouter(
     prefix="/users",
@@ -88,3 +96,33 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     db.delete(db_user)
     db.commit()
     return {"message": f"User {user_id} deleted"}
+
+# ================================
+# 5️⃣ Export User to CSV
+# ================================
+@router.get("/export/csv")
+def export_csv(db: Session = Depends(get_db)):
+    """Export all users as a CSV file """
+    users = db.query(models.User).all()
+
+    # Use Stringio (text buffer)
+    buffer = io.StringIO()
+    writer = csv.writer(buffer , lineterminator='\n')
+
+    # write user rows
+    for user in users :
+        writer.writerow([
+             user.id,
+             user.name,
+             user.email,
+             user.password                  
+             ])
+    #  Convert text buffer to bytes
+    buffer_bytes = io.BytesIO(buffer.getvalue().encode('utf-8'))
+    buffer.close()
+
+    return StreamingResponse(
+        buffer_bytes,
+        media_type="text/csv",
+        headers={"Content-Disposition":"attachment ; filename=users.csv"}
+    )

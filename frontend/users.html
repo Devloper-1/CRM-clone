@@ -10,14 +10,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Global config -->
-    <script src="/frontend/js/config.js" defer></script>
+    <script src="/frontend/js/config.js"></script>
 
     <!-- API helper -->
-    <script src="/frontend/js/api.js" defer></script>
+    <script src="/frontend/js/api.js"></script>
 
     <!-- Page-specific scripts -->
-    <script src="/frontend/js/users.js" defer></script>
-    <script src="/frontend/js/users_ui.js" defer></script>
+    <script src="/frontend/js/users.js"></script>
+    <script src="/frontend/js/users_ui.js"></script>
 
 </head>
 
@@ -54,23 +54,34 @@
     <!-- Main Content -->
     <main class="p-6">
 
+        <!-- Export Section -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-700">📂 Export Users</h2>
+            <button id="exportuserBtn" onclick="exportusers()"
+                class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                Export CSV
+            </button>
+        </div>
+
         <!-- Users Table -->
-        <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-            <table class="min-w-full border border-gray-300">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="border border-gray-300 px-4 py-2 text-left">ID</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left">Email</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left">Password</th>
-                    </tr>
-                </thead>
-                <tbody id="usersTable" class="divide-y divide-gray-300">
-                    <tr>
-                        <td colspan="4" class="px-4 py-3 text-center text-gray-500">Loading...</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="overflow-y-auto max-h-64">
+                <table class="min-w-full border border-gray-300">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="border border-gray-300 px-4 py-2 text-left">ID</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Email</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Password</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable" class="divide-y divide-gray-300">
+                        <tr>
+                            <td colspan="4" class="px-4 py-3 text-center text-gray-500">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- User Form -->
@@ -105,7 +116,7 @@
 
     </main>
 
-    
+
 </body>
 
 </html>

@@ -105,12 +105,50 @@ async function deletePayment() {
 }
 
 // ----------------------
+// EXPORT TASKS TO CSV
+// ----------------------
+async function exportpayments() {
+  alert("✅ Export button clicked!");
+
+  const token = sessionStorage.getItem("token");
+  if (!token) {
+    alert("⚠️ You are not logged in!");
+    window.location.href = "/frontend/login.html";
+    return;
+  }
+
+  try {
+    const res = await apiFetch("/payments/export/csv", {}, true);
+    if (!res) {
+      alert("❌ No response from server");
+      return;
+    }
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "payments.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+
+    alert("✅ Download triggered! Check your Downloads folder.");
+  } catch (err) {
+    console.error("Error exporting payments:", err);
+    alert("❌ Failed to export payments. See console.");
+  }
+}
+
+// ----------------------
 // Expose functions globally
 // ----------------------
 window.fetchPayments = fetchPayments;
 window.addPayment = addPayment;
 window.updatePayment = updatePayment;
 window.deletePayment = deletePayment;
+window.exportpayments = exportpayments;
 
 // ----------------------
 // Load payments on page load
